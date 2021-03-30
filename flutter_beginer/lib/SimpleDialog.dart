@@ -1,0 +1,62 @@
+import 'package:flutter/material.dart';
+void main(){
+  runApp(new MaterialApp(
+    home: new MyApp(),
+  ));
+}
+class MyApp extends StatefulWidget{
+  @override
+  _State createState()=>new _State();
+}
+
+enum Answers{YES,NO,MAYBE}
+
+class _State extends State<MyApp>{
+  String _value='';
+  void _setValue(String value)=>setState(()=>_value=value);
+  Future _askUser() async {
+    switch(
+    await showDialog(context: context,
+        builder: (BuildContext context) {
+          return new SimpleDialog(
+            title: new Text('Do you like Flutter?'),
+            children: <Widget>[
+              new SimpleDialogOption(child: new Text('Yes!!!'),onPressed: (){Navigator.pop(context, Answers.YES);},),
+              new SimpleDialogOption(child: new Text('NO :('),onPressed: (){Navigator.pop(context, Answers.NO);},),
+              new SimpleDialogOption(child: new Text('May be :|'),onPressed: (){Navigator.pop(context, Answers.MAYBE);},),
+            ],
+          );
+        }
+    )
+    ) {
+      case Answers.YES:
+        _setValue('Yes');
+        break;
+      case Answers.NO:
+        _setValue('No');
+        break;
+      case Answers.MAYBE:
+        _setValue('Maybe');
+        break;
+
+    }
+  }
+  @override
+  Widget build(BuildContext context) {
+      return new Scaffold(
+        appBar: new AppBar(
+          title: new Text('Flutter App'),
+        ),
+        body: new Container(
+          child: new Center(
+            child: new Column(
+              children: [
+               new Text(_value),
+                new ElevatedButton(onPressed: _askUser, child: new Text('Show'))
+              ],
+            ),
+          ),
+        ),
+      );
+  }
+}
